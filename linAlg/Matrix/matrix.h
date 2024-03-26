@@ -4,22 +4,22 @@
     - getCols() : Returns the number of columns
     - getRows() : Returns the number of rows
 */
+template<typename T, int Rows, int Cols>
 class Matrix{
     private:
-        int rows, cols;
-        double **data;
+        T **data;
     public:
         //Constructor
-        Matrix(int rows, int cols):rows(rows),cols(cols){
-            data = (double**)std::calloc(rows, sizeof(double*));
-            for(int i = 0; i<rows; i++){
-                data[i] = (double*)std::calloc(cols, sizeof(double*));
+        Matrix(){
+            data = (T**)std::calloc(Rows, sizeof(T*));
+            for(int i = 0; i<Rows; i++){
+                data[i] = (T*)std::calloc(Cols, sizeof(T*));
             }
         }
 
         //Destructor
         ~Matrix(){
-            for(int i = 0; i<rows; i++){
+            for(int i = 0; i<Rows; i++){
                 free(data[i]);
             }
             free(data);
@@ -27,22 +27,97 @@ class Matrix{
 
         //get number of rows
         int getRows(){
-            return rows;
+            return Rows;
         }
 
         //get number of columns
         int getCols(){
-            return cols;
+            return Cols;
         }
 
         //Overloading the [] operator
-        double* operator[](int row) {
+        T* operator[](int row) {
             return data[row];
         }
 
         //Required for const-correctness
-        const double* operator[](int row) const {
+        const T* operator[](int row) const {
+            return data[row];
+        }
+};
+
+template<typename T, int Cols>
+class Matrix<T, 1, Cols>{
+
+        private:
+        T *data;
+        int Rows = 1;
+    public:
+        //Constructor
+        Matrix(){
+            data = (T*)std::calloc(Cols, sizeof(T*));
+        }
+
+        //Destructor
+        ~Matrix(){
+            free(data);
+        }
+
+        //get number of rows
+        int getRows(){
+            return Rows;
+        }
+
+        //get number of columns
+        int getCols(){
+            return Cols;
+        }
+
+        //Overloading the [] operator
+        T& operator[](int row) {
             return data[row];
         }
 
+        //Required for const-correctness
+        const T& operator[](int row) const {
+            return data[row];
+        }
+};
+
+template<typename T, int Rows>
+class Matrix<T, Rows, 1>{
+
+        private:
+        T *data;
+        int Cols = 1;
+    public:
+        //Constructor
+        Matrix(){
+            data = (T*)std::calloc(Rows, sizeof(T*));
+        }
+
+        //Destructor
+        ~Matrix(){
+            free(data);
+        }
+
+        //get number of rows
+        int getRows(){
+            return Rows;
+        }
+
+        //get number of columns
+        int getCols(){
+            return Cols;
+        }
+
+        //Overloading the [] operator
+        T& operator[](int row) {
+            return data[row];
+        }
+
+        //Required for const-correctness
+        const T& operator[](int row) const {
+            return data[row];
+        }
 };
