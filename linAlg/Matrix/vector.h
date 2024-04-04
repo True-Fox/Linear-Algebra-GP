@@ -1,3 +1,6 @@
+#ifndef VECTOR_H
+#define VECTOR_H
+
 #include "matrix.h"
 
 template<typename T, int Cols>
@@ -66,6 +69,8 @@ class Matrix<T, Rows, 1>{
             data = new T[Rows];
         }
 
+        //Intialize matrix with arguments
+        //Example: Matrix<int, 2,2> M(1,2,3,4)
         template<typename... Args>
         Matrix(Args&&... args) {
             data = new T[Rows];
@@ -73,6 +78,8 @@ class Matrix<T, Rows, 1>{
             ((data[index++] = args), ...);
         }
 
+        //Intialize matrix with list
+        //Example: Matrix<int, 2,2> M {1,2,3,4}
         Matrix(std::initializer_list<T> list){
             data = new T*[Rows];
 
@@ -114,3 +121,4 @@ using Vector = Matrix<T, 1, size>;
 template<typename T, int size>
 using C_Vector = Matrix<T, size, 1>;
 
+#endif 
