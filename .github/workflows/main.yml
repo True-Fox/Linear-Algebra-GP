@@ -1,0 +1,26 @@
+name : Run Tests
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y g++ make
+
+      - name: Test 1 - Instantiation, Operations, Determinant
+        run: |
+              make all
+              echo "Test case 1: passed"
+              
+
+      - name: Clean Files
+        run: make clean
+    
