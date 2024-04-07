@@ -4,7 +4,7 @@
 #include "../linAlg/Matrix/matrix.h"
 #include "../linAlg/Matrix/vector.h"
 
-#include "../linAlg/Utils/PrintMatrix.h"
+#include "../linAlg/Utils/Utils.h"
 
 int main() {
 
@@ -13,6 +13,14 @@ int main() {
 
     Matrix<int, 2, 2> res = mat1 * Vec1;
 
+    std::cout<<"\nBefore Apply\n";
+    print(res);
+
+    apply(res, [](int x){
+           return x*x; 
+    });
+
+    std::cout<<"\nAfter Apply\n";
     print(res);
 
 }

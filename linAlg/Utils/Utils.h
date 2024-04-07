@@ -24,3 +24,26 @@ void print(Vector<T, Cols>& vec){
         std::cout << vec[i] << " ";
     }
 }
+
+template<typename T, int Rows, int Cols, typename Func>
+void apply(Matrix<T, Rows, Cols>& Mat, Func&& func){
+    for(int i = 0; i < Rows; ++i){
+        for(int j = 0; j < Cols; ++j){
+            Mat[i][j] = func(Mat[i][j]);
+        }
+    }
+}
+
+template<typename T, int Cols, typename Func>
+void apply(Vector<T, Cols>& Vec, Func&& func){
+    for(int i = 0; i < Cols; ++i){
+        Vec[i] = func(Vec[i]);
+    }
+}
+
+template<typename T, int Rows, typename Func>
+void apply(C_Vector<T, Rows>& Vec, Func&& func){
+    for(int i = 0; i < Rows; ++i){
+        Vec[i] = func(Vec[i]);
+    }
+}

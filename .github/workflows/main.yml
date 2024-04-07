@@ -18,10 +18,13 @@ jobs:
       - name: Test 1 - Instantiation, Operations, Determinant
         run: |
               make file_name=test_1
-              make file_name=test_2  
               echo "Test case 1: passed"
-              
 
+      - name: Test 2 - Print, apply from utils.h
+        run: |
+              make file_name=test_2
+              echo "Test case 2: passed"
+              
       - name: Clean Files
         run: make clean
     

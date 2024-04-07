@@ -9,7 +9,7 @@
 #include "../linAlg/Matrix/vector.h"
 #include "../linAlg/Matrix/matrix.h"
 
-#include "../linAlg/Utils/PrintMatrix.h"
+#include "../linAlg/Utils/Utils.h"
 
 int main() {
 
