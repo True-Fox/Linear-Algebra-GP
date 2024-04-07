@@ -15,12 +15,12 @@ class Matrix<T, 1, Cols>{
             data = new T[Cols];
         }
 
-        template<typename... Args>
-        Matrix(Args&&... args) {
-            data = new T[Cols];
-            int index = 0;
-            ((data[index++] = static_cast<T>(args)), ...);
-        }
+        // template<typename... Args>
+        // Matrix(Args&&... args) {
+        //     data = new T[Cols];
+        //     int index = 0;
+        //     ((data[index++] = static_cast<T>(args)), ...);
+        // }
 
         Matrix(std::initializer_list<T> list){
             data = new T[Cols];
@@ -81,7 +81,7 @@ class Matrix<T, Rows, 1>{
         //Intialize matrix with list
         //Example: Matrix<int, 2,2> M {1,2,3,4}
         Matrix(std::initializer_list<T> list){
-            data = new T*[Rows];
+            data = new T[Rows];
 
             auto it = list.begin();
             for (int i = 0; i < Rows; ++i) {
