@@ -20,11 +20,10 @@ jobs:
               make file_name=test_1
               echo "Test case 1: passed"
 
-      - name: Test 2 - Print, apply from utils.h
+      - name: Test 2 - Print, apply from utils.h, all possible multiplications
         run: |
               make file_name=test_2
               echo "Test case 2: passed"
-              
+
       - name: Clean Files
         run: make clean
-    

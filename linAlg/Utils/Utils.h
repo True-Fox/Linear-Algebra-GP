@@ -23,6 +23,12 @@ void print(Vector<T, Cols>& vec){
     for(int i = 0; i < vec.getCols(); ++i) {
         std::cout << vec[i] << " ";
     }
+    std::cout<<"\n";
+}
+
+template<typename T>
+void print(T& out){
+    std::cout<<out<<"\n";
 }
 
 template<typename T, int Rows, int Cols, typename Func>

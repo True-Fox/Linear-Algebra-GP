@@ -3,6 +3,24 @@
 
 #include "matrix.h"
 
+//Forward Declarations (I am not sure why yet)
+template<typename T, int Rows, int Cols>
+class Matrix;
+
+template<typename T, int Cols>
+class Matrix<T, 1, Cols>;
+
+template<typename T, int Rows>
+class Matrix<T, Rows, 1>;
+
+template<typename T, int size>
+using Vector = Matrix<T, 1, size>;
+
+template<typename T, int size>
+using C_Vector = Matrix<T, size, 1>;
+
+
+
 template<typename T, int Cols>
 class Matrix<T, 1, Cols>{
 
@@ -15,20 +33,51 @@ class Matrix<T, 1, Cols>{
             data = new T[Cols];
         }
 
-        // template<typename... Args>
-        // Matrix(Args&&... args) {
-        //     data = new T[Cols];
-        //     int index = 0;
-        //     ((data[index++] = static_cast<T>(args)), ...);
-        // }
 
         Matrix(std::initializer_list<T> list){
+            if(list.size() != Cols){
+                throw std::invalid_argument("Initializer list size does not match Vector size");
+            }
             data = new T[Cols];
 
             auto it = list.begin();
             for (int i = 0; i < Cols; ++i) {
                     data[i] = (it != list.end()) ? *it++ : 0;
             }
+        }
+
+        template<int MatrixRows, int MatrixCols>
+        Vector<T, MatrixCols> operator*(const Matrix<T, MatrixRows, MatrixCols>& other)const{
+            static_assert(Cols == MatrixRows,"The given dimensions are not compatible for multiplication");
+
+            Vector<T, MatrixCols> result;
+
+            for(int i=0; i<MatrixRows; i++){
+                T sum = 0;
+                for(int j=0; j<Cols; j++){
+                    sum = sum + ((*this)[j] * other[j][i]);
+                }
+                result[i] = sum;
+            }
+
+            return result;
+        }
+
+        template<int ColRows>
+        T operator*(const C_Vector<T,ColRows>& other){
+            static_assert(Cols == ColRows,"The given dimensions are not compatible for multiplication");
+
+            T result;
+
+            for(int i=0; i<Cols; i++){
+                T sum = 0;
+                for(int j=0; j<ColRows; j++){
+                    sum = sum + ((*this)[i] * other[j]);
+                }
+                result = sum;
+            }
+
+            return result;
         }
 
         //Destructor
@@ -69,24 +118,31 @@ class Matrix<T, Rows, 1>{
             data = new T[Rows];
         }
 
-        //Intialize matrix with arguments
-        //Example: Matrix<int, 2,2> M(1,2,3,4)
-        template<typename... Args>
-        Matrix(Args&&... args) {
-            data = new T[Rows];
-            int index = 0;
-            ((data[index++] = args), ...);
-        }
-
         //Intialize matrix with list
         //Example: Matrix<int, 2,2> M {1,2,3,4}
         Matrix(std::initializer_list<T> list){
+            if(list.size() != Rows){
+                throw std::invalid_argument("Initializer list size does not match Vector size");
+            }
             data = new T[Rows];
 
             auto it = list.begin();
             for (int i = 0; i < Rows; ++i) {
                     data[i] = (it != list.end()) ? *it++ : 0;
             }
+        }
+
+        template<int MatrixCols>
+        Matrix<T, Rows, MatrixCols> operator*(Vector<T, MatrixCols>& other){
+            Matrix<T, Rows, MatrixCols> result;
+
+            for(int i=0; i<Rows; i++){
+                for(int j=0; j<MatrixCols; j++){
+                    result[i][j] = result[i][j] + ((*this)[i]*other[j]);
+                }
+            }
+
+            return result;
         }
 
         //Destructor
@@ -114,6 +170,7 @@ class Matrix<T, Rows, 1>{
             return data[row];
         }
 };
+
 
 template<typename T, int size>
 using Vector = Matrix<T, 1, size>;

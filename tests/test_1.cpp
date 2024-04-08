@@ -27,8 +27,8 @@ int main() {
     print(mat2);
 
     // std::cout<<"\nMat1*Mat2:\n";
-    Matrix<int, 2, 2> mat3 (mat1 * mat2);
-    Matrix<int, 2, 2> mat4 (mat3 * mat3);
+    auto mat3 (mat1 * mat2);
+    auto mat4 (mat3 * mat3);
 
     print(mat3);
     print(mat4);
