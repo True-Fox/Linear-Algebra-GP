@@ -1,10 +1,18 @@
+# Variables
+file_name = $(file_name)
+
+# Rules
 all: build run
- 
+
 build:
-	g++ -std=c++20 tests/${file_name}.cpp -O3
+	g++ -std=c++20 tests/$(file_name).cpp -O3
 
 run:
+ifdef OS
+	./a.exe
+else
 	./a.out
+endif
 
 clean:
-	rm *.out
+	rm -f a.out
