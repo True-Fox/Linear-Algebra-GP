@@ -53,3 +53,23 @@ void apply(C_Vector<T, Rows>& Vec, Func&& func){
         Vec[i] = func(Vec[i]);
     }
 }
+
+template<typename T, int Rows, int Cols>
+Matrix<T, Cols, Rows> transpose(Matrix<T, Cols, Rows>& mat){
+    Matrix<T, Cols, Rows> result;
+    for (int i = 0; i < Rows; ++i) {
+        for (int j = 0; j < Cols; ++j) {
+            result[j][i] = mat[i][j];
+        }
+    }
+    return result;    
+}
+
+template<typename T, int Cols>
+C_Vector<T, Cols> transpose(Vector<T, Cols>& mat){
+    C_Vector<T, Cols> result;
+    for (int j = 0; j < Cols; ++j) {
+        result[j] = mat[j];
+    }
+    return result;    
+}

@@ -64,6 +64,6 @@ int main() {
     print(vec10);
 
     std::cout<<"\nCombination of addition and multiplication\n";
-    auto res11 = vec10 * vec7 + res3;
+    auto res11 = (vec10 * vec7) + (res3 * res3);
     print(res11);
 }

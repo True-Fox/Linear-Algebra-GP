@@ -98,6 +98,16 @@ class Matrix{
         return result;
         }
 
+        Matrix operator+(const Matrix&& other) const {
+        Matrix result;
+        for (int i = 0; i < Rows; ++i) {
+            for (int j = 0; j < Cols; ++j) {
+                result[i][j] = (*this)[i][j] + other[i][j];
+            }
+        }
+        return result;
+        }
+
         //matrix multiplication
         template<int OtherRows ,int OtherCols>
         Matrix<T, Rows, OtherCols> operator*(const Matrix<T, OtherRows, OtherCols>& other) const {
@@ -116,6 +126,23 @@ class Matrix{
             return result;
         }  
 
+        template<int OtherRows ,int OtherCols>
+        Matrix<T, Rows, OtherCols> operator*(const Matrix<T, OtherRows, OtherCols>&& other) const {
+            static_assert(Cols == OtherRows,"The given matrix dimensions are not compatible for multiplication");
+
+            Matrix<T, Rows, OtherCols> result;
+
+            for (int i = 0; i < Rows; ++i) {
+                for (int j = 0; j < OtherCols; ++j) {
+                    for (int k = 0; k < Cols; ++k) {
+                        result[i][j] += (*this)[i][k] * other[k][j];
+                    }
+                }
+            }
+
+            return result;
+        }          
+
 
         template<int VectorRows>
         C_Vector<T, Rows> operator*(const C_Vector<T, VectorRows>& other) const {
@@ -132,8 +159,8 @@ class Matrix{
             }
 
             return result;
-
         }
+
 
 
         //Overloading Assignment operator
