@@ -24,6 +24,10 @@ jobs:
         run: |
               make file_name=test_2
               echo "Test case 2: passed"
+      - name: Test 3 - Transpose
+        run: |
+              make file_name=test_3
+              echo "Test case 3: passed"
 
       - name: Clean Files
         run: make clean
