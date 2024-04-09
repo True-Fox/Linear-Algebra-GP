@@ -46,6 +46,16 @@ class Matrix<T, 1, Cols>{
             }
         }
 
+        template<int OtherCols>
+        Vector<T, Cols> operator+(Vector<T, OtherCols>& other){
+            static_assert(Cols==OtherCols, "The dimensions do not match for the operation performed.");
+            Vector<T, Cols> result;
+            for(int i=0;i<Cols;i++){
+                result[i] = (*this)[i] + other[i];
+            }
+            return result;
+        }
+
         template<int MatrixRows, int MatrixCols>
         Vector<T, MatrixCols> operator*(const Matrix<T, MatrixRows, MatrixCols>& other)const{
             static_assert(Cols == MatrixRows,"The given dimensions are not compatible for multiplication");
@@ -132,6 +142,16 @@ class Matrix<T, Rows, 1>{
             }
         }
 
+        template<int OtherRows>
+        C_Vector<T, Rows> operator+(C_Vector<T, OtherRows>& other){
+            static_assert(Rows==OtherRows, "The dimensions do not match for the operation performed.");
+            C_Vector<T, Rows> result;
+            for(int i=0;i<Rows;i++){
+                result[i] = (*this)[i] + other[i];
+            }
+            return result;
+        }
+
         template<int MatrixCols>
         Matrix<T, Rows, MatrixCols> operator*(Vector<T, MatrixCols>& other){
             Matrix<T, Rows, MatrixCols> result;
@@ -170,12 +190,5 @@ class Matrix<T, Rows, 1>{
             return data[row];
         }
 };
-
-
-template<typename T, int size>
-using Vector = Matrix<T, 1, size>;
-
-template<typename T, int size>
-using C_Vector = Matrix<T, size, 1>;
 
 #endif 

@@ -35,8 +35,8 @@ int main() {
     print(res2);
 
     std::cout<<"Column Vector X Row Vector\n";
-    C_Vector<int, 3> c_vec3 {1,2,3};
-    Vector<int, 4> vec3 {1,2,3,4};
+    C_Vector<int, 5> c_vec3 {1,2,3,4,5};
+    Vector<int, 5> vec3 {1,2,3,4,5};
 
     auto res3 = c_vec3 * vec3;
 
@@ -51,4 +51,19 @@ int main() {
 
     std::cout<<"\nAfter Apply\n";
     print(res3);
+
+    Vector<int, 5> vec5 {1,2,3,4,5};
+    Vector<int, 5> vec6 {3,4,5,6,7};
+    C_Vector<int, 5> vec8 {1,2,3,4,5};
+    C_Vector<int, 5> vec9 {3,4,5,6,7};
+    auto vec7 = vec5+vec6;
+    auto vec10 = vec8 + vec9;
+
+    std::cout<<"Addition of two vectors: \n";
+    print(vec7);
+    print(vec10);
+
+    std::cout<<"\nCombination of addition and multiplication\n";
+    auto res11 = vec10 * vec7 + res3;
+    print(res11);
 }
