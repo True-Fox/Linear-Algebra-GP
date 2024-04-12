@@ -10,45 +10,48 @@
     - getCols() : Returns the number of columns
     - getRows() : Returns the number of rows
 */
+template<typename T>
+concept Numeric_Type = requires {
+    std::is_arithmetic_v<T>;
+};
 
-template<typename T, int Rows, int Cols>
+
+template<typename Numeric_Type, int Rows, int Cols>
 class Matrix;
 
-template<typename T, int Cols>
-class Matrix<T, 1, Cols>;
+template<typename Numeric_Type, int Cols>
+class Matrix<Numeric_Type, 1, Cols>;
 
-template<typename T, int Rows>
-class Matrix<T, Rows, 1>;
+template<typename Numeric_Type, int Rows>
+class Matrix<Numeric_Type, Rows, 1>;
 
-template<typename T, int size>
-using Vector = Matrix<T, 1, size>;
+template<typename Numeric_Type, int size>
+using Vector = Matrix<Numeric_Type, 1, size>;
 
-template<typename T, int size>
-using C_Vector = Matrix<T, size, 1>;
+template<typename Numeric_Type, int size>
+using C_Vector = Matrix<Numeric_Type, size, 1>;
 
-
-
-template<typename T, int Rows, int Cols>
+template<typename Numeric_Type, int Rows, int Cols>
 class Matrix{
     public:
         //Default Constructor
         Matrix(){
-            data = new T*[Rows];
+            data = new Numeric_Type*[Rows];
             for(int i = 0; i<Rows; i++){
-                data[i] = new T[Cols]();
+                data[i] = new Numeric_Type[Cols]();
             }
         }
 
         //Intialize matrix with list
         //Example: Matrix<int, 2,2> M {1,2,3,4}
-        Matrix(std::initializer_list<T> list){
+        Matrix(std::initializer_list<Numeric_Type> list){
             // assert(list.size() == Rows * Cols && "Initializer list size does not match matrix size");
             if(list.size() != Rows * Cols){
                 throw std::invalid_argument("Initializer list size does not match matrix size");
             }
-            data = new T*[Rows];
+            data = new Numeric_Type*[Rows];
             for(int i = 0; i<Rows; i++){
-                data[i] = new T[Cols]();
+                data[i] = new Numeric_Type[Cols]();
             }
 
             auto it = list.begin();
@@ -78,42 +81,47 @@ class Matrix{
         }
 
         //Overloading the [] operator
-        T* operator[](int row) {
+        Numeric_Type* operator[](int row) {
             return data[row];
         }
 
         //Required for const-correctness
-        const T* operator[](int row) const {
+        const Numeric_Type* operator[](int row) const {
             return data[row];
         }
 
         //addition of two matrices
-        Matrix operator+(const Matrix& other) const {
-        Matrix result;
-        for (int i = 0; i < Rows; ++i) {
-            for (int j = 0; j < Cols; ++j) {
-                result[i][j] = (*this)[i][j] + other[i][j];
+        template<int OtherRow, int OtherColumn>
+        typename std::enable_if<(Cols == OtherColumn && Rows == OtherRow), Matrix<Numeric_Type, Rows, Cols>>::type
+        operator+(const Matrix<Numeric_Type, OtherRow, OtherColumn>& other) const {
+            Matrix<Numeric_Type, Rows, Cols> result;
+            for (int i = 0; i < Rows; ++i) {
+                for (int j = 0; j < Cols; ++j) {
+                    result[i][j] = (*this)[i][j] + other[i][j];
+                }
             }
-        }
-        return result;
+            return result;
         }
 
-        Matrix operator+(const Matrix&& other) const {
-        Matrix result;
-        for (int i = 0; i < Rows; ++i) {
-            for (int j = 0; j < Cols; ++j) {
-                result[i][j] = (*this)[i][j] + other[i][j];
+        template<int OtherRow, int OtherColumn>
+        typename std::enable_if<(Cols == OtherColumn && Rows == OtherRow), Matrix<Numeric_Type, Rows, Cols>>::type
+        operator+(const Matrix<Numeric_Type, OtherRow, OtherColumn>&& other) const {
+            Matrix<Numeric_Type, Rows, Cols> result;
+            for (int i = 0; i < Rows; ++i) {
+                for (int j = 0; j < Cols; ++j) {
+                    result[i][j] = (*this)[i][j] + other[i][j];
+                }
             }
-        }
-        return result;
+            return result;
         }
 
         //matrix multiplication
         template<int OtherRows ,int OtherCols>
-        Matrix<T, Rows, OtherCols> operator*(const Matrix<T, OtherRows, OtherCols>& other) const {
+        typename std::enable_if<Cols == OtherRows, Matrix<Numeric_Type, Rows, OtherCols>>::type
+        operator*(const Matrix<Numeric_Type, OtherRows, OtherCols>& other) const {
             static_assert(Cols == OtherRows,"The given matrix dimensions are not compatible for multiplication");
 
-            Matrix<T, Rows, OtherCols> result;
+            Matrix<Numeric_Type, Rows, OtherCols> result;
 
             for (int i = 0; i < Rows; ++i) {
                 for (int j = 0; j < OtherCols; ++j) {
@@ -126,11 +134,10 @@ class Matrix{
             return result;
         }  
 
-        template<int OtherRows ,int OtherCols>
-        Matrix<T, Rows, OtherCols> operator*(const Matrix<T, OtherRows, OtherCols>&& other) const {
-            static_assert(Cols == OtherRows,"The given matrix dimensions are not compatible for multiplication");
-
-            Matrix<T, Rows, OtherCols> result;
+        template<int OtherRows, int OtherCols>
+        typename std::enable_if<Cols == OtherRows, Matrix<Numeric_Type, Rows, OtherCols>>::type
+        operator*(const Matrix<Numeric_Type, OtherRows, OtherCols>&& other) const {
+            Matrix<Numeric_Type, Rows, OtherCols> result;
 
             for (int i = 0; i < Rows; ++i) {
                 for (int j = 0; j < OtherCols; ++j) {
@@ -141,19 +148,17 @@ class Matrix{
             }
 
             return result;
-        }          
-
+        }
 
         template<int VectorRows>
-        C_Vector<T, Rows> operator*(const C_Vector<T, VectorRows>& other) const {
-            static_assert(Cols == VectorRows,"The given matrix dimensions are not compatible for multiplication");
+        typename std::enable_if<Cols == VectorRows, C_Vector<Numeric_Type, Rows>>::type
+        operator*(const C_Vector<Numeric_Type, VectorRows>& other) const {
+            C_Vector<Numeric_Type, Rows> result;
 
-            C_Vector<T, Rows> result;
-
-            for(int i=0;i<Rows;i++){
-                T sum = 0;
-                for(int j=0;j<VectorRows;j++){
-                    sum = sum + (*this)[i][j] * other[j];
+            for (int i = 0; i < Rows; ++i) {
+                Numeric_Type sum = 0;
+                for (int j = 0; j < VectorRows; ++j) {
+                    sum += (*this)[i][j] * other[j];
                 }
                 result[i] = sum;
             }
@@ -162,9 +167,8 @@ class Matrix{
         }
 
 
-
         //Overloading Assignment operator
-        Matrix<T, Rows, Cols>& operator=(const Matrix<T, Rows, Cols>& other) {
+        Matrix<Numeric_Type, Rows, Cols>& operator=(const Matrix<Numeric_Type, Rows, Cols>& other) {
             if (this != &other) {
                 for (int i = 0; i < Rows; ++i) {
                     delete[] data[i];
@@ -174,9 +178,9 @@ class Matrix{
                 int OtherRows = other.rows;
                 int OtherCols = other.cols;
 
-                data = new T*[Rows];
+                data = new Numeric_Type*[Rows];
                 for (int i = 0; i < OtherRows; ++i) {
-                    data[i] = new T[Cols]();
+                    data[i] = new Numeric_Type[Cols]();
                     for (int j = 0; j < OtherCols; ++j) {
                         data[i][j] = other.data[i][j];
                     }
@@ -187,29 +191,29 @@ class Matrix{
 
         //determinant of the square matrices only
         template<int dim = Rows>
-        typename std::enable_if<(dim == Cols), T>::type determinant() const {
+        typename std::enable_if<(dim == Cols), Numeric_Type>::type determinant() const {
             return determinantHelper(*this);
         }
 
     private:
-        T **data;
+        Numeric_Type **data;
         //calculate determinant recursively
         template<int dim = Rows>
-        typename std::enable_if<(dim == 1), T>::type determinantHelper(const Matrix& mat) const {
+        typename std::enable_if<(dim == 1),Numeric_Type>::type determinantHelper(const Matrix& mat) const {
             return mat[0][0];
         }
 
         template<int dim = Rows>
-        typename std::enable_if<(dim == 2), T>::type determinantHelper(const Matrix& mat) const {
+        typename std::enable_if<(dim == 2), Numeric_Type>::type determinantHelper(const Matrix& mat) const {
             return mat[0][0] * mat[1][1] - mat[0][1] * mat[1][0];
         }
 
         template<int dim = Rows>
-        typename std::enable_if<(dim > 2), T>::type determinantHelper(const Matrix& mat) const {
-            T det = 0;
+        typename std::enable_if<(dim > 2), Numeric_Type>::type determinantHelper(const Matrix& mat) const {
+            Numeric_Type det = 0;
             for (int j = 0; j < Cols; ++j) {
-                T sign = (j % 2 == 0) ? 1 : -1;
-                Matrix<T, dim - 1, dim - 1> minorMat;
+                Numeric_Type sign = (j % 2 == 0) ? 1 : -1;
+                Matrix<Numeric_Type, dim - 1, dim - 1> minorMat;
                 for (int k = 1; k < Rows; ++k) {
                     for (int l = 0, col = 0; l < Cols; ++l) {
                         if (l == j) continue;
