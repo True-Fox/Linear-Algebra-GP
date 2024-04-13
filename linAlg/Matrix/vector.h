@@ -7,25 +7,25 @@
 
 //Forward Declarations (I am not sure why yet)
 
-template<Numeric Numeric_Type, int Rows, int Cols>
+template<Numeric T, int Rows, int Cols>
 class Matrix;
 
-template<Numeric Numeric_Type, int Cols>
-class Matrix<Numeric_Type, 1, Cols>;
+template<Numeric T, int Cols>
+class Matrix<T, 1, Cols>;
 
-template<Numeric Numeric_Type, int Rows>
-class Matrix<Numeric_Type, Rows, 1>;
+template<Numeric T, int Rows>
+class Matrix<T, Rows, 1>;
 
-template<Numeric Numeric_Type, int size>
-using Vector = Matrix<Numeric_Type, 1, size>;
+template<Numeric T, int size>
+using Vector = Matrix<T, 1, size>;
 
-template<Numeric Numeric_Type, int size>
-using C_Vector = Matrix<Numeric_Type, size, 1>;
+template<Numeric T, int size>
+using C_Vector = Matrix<T, size, 1>;
 
 
 
-template<Numeric Numeric_Type, int Cols>
-class Matrix<Numeric_Type, 1, Cols>{
+template<Numeric T, int Cols>
+class Matrix<T, 1, Cols>{
 
         private:
         T *data;
@@ -122,8 +122,8 @@ class Matrix<Numeric_Type, 1, Cols>{
         }
 };
 
-template<Numeric Numeric_Type, int Rows>
-class Matrix<Numeric_Type, Rows, 1>{
+template<Numeric T, int Rows>
+class Matrix<T, Rows, 1>{
 
         private:
         T *data;
