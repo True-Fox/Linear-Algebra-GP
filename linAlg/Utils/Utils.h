@@ -1,7 +1,7 @@
 #include "../Matrix/matrix.h"
 #include "../Matrix/vector.h"
 
-template<typename T, int Rows, int Cols>
+template<Numeric T, int Rows, int Cols>
 void print(Matrix<T, Rows, Cols>& mat) {
     for(int i = 0; i < Rows; ++i) {
         for (int j = 0; j < Cols; ++j) {
@@ -11,14 +11,14 @@ void print(Matrix<T, Rows, Cols>& mat) {
     }
 }
 
-template<typename T, int Rows>
+template<Numeric T, int Rows>
 void print(C_Vector<T, Rows>& vec){
     for(int i = 0; i < vec.getRows(); ++i) {
         std::cout << vec[i] << "\n";
     }
 }
 
-template<typename T, int Cols>
+template<Numeric T, int Cols>
 void print(Vector<T, Cols>& vec){
     for(int i = 0; i < vec.getCols(); ++i) {
         std::cout << vec[i] << " ";
@@ -26,12 +26,12 @@ void print(Vector<T, Cols>& vec){
     std::cout<<"\n";
 }
 
-template<typename T>
+template<Numeric T>
 void print(T& out){
     std::cout<<out<<"\n";
 }
 
-template<typename T, int Rows, int Cols, typename Func>
+template<Numeric T, int Rows, int Cols, typename Func>
 void apply(Matrix<T, Rows, Cols>& Mat, Func&& func){
     for(int i = 0; i < Rows; ++i){
         for(int j = 0; j < Cols; ++j){
@@ -40,21 +40,21 @@ void apply(Matrix<T, Rows, Cols>& Mat, Func&& func){
     }
 }
 
-template<typename T, int Cols, typename Func>
+template<Numeric T, int Cols, typename Func>
 void apply(Vector<T, Cols>& Vec, Func&& func){
     for(int i = 0; i < Cols; ++i){
         Vec[i] = func(Vec[i]);
     }
 }
 
-template<typename T, int Rows, typename Func>
+template<Numeric T, int Rows, typename Func>
 void apply(C_Vector<T, Rows>& Vec, Func&& func){
     for(int i = 0; i < Rows; ++i){
         Vec[i] = func(Vec[i]);
     }
 }
 
-template<typename T, int Rows, int Cols>
+template<Numeric T, int Rows, int Cols>
 Matrix<T, Cols, Rows> transpose(Matrix<T, Cols, Rows>& mat){
     Matrix<T, Cols, Rows> result;
     for (int i = 0; i < Rows; ++i) {
@@ -65,7 +65,7 @@ Matrix<T, Cols, Rows> transpose(Matrix<T, Cols, Rows>& mat){
     return result;    
 }
 
-template<typename T, int Cols>
+template<Numeric T, int Cols>
 C_Vector<T, Cols> transpose(Vector<T, Cols>& mat){
     C_Vector<T, Cols> result;
     for (int j = 0; j < Cols; ++j) {

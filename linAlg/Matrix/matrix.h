@@ -11,27 +11,27 @@
     - getRows() : Returns the number of rows
 */
 template<typename T>
-concept Numeric_Type = requires {
+concept Numeric = requires {
     std::is_arithmetic_v<T>;
 };
 
 
-template<typename Numeric_Type, int Rows, int Cols>
+template<Numeric Numeric_Type, int Rows, int Cols>
 class Matrix;
 
-template<typename Numeric_Type, int Cols>
+template<Numeric Numeric_Type, int Cols>
 class Matrix<Numeric_Type, 1, Cols>;
 
-template<typename Numeric_Type, int Rows>
+template<Numeric Numeric_Type, int Rows>
 class Matrix<Numeric_Type, Rows, 1>;
 
-template<typename Numeric_Type, int size>
+template<Numeric Numeric_Type, int size>
 using Vector = Matrix<Numeric_Type, 1, size>;
 
-template<typename Numeric_Type, int size>
+template<Numeric Numeric_Type, int size>
 using C_Vector = Matrix<Numeric_Type, size, 1>;
 
-template<typename Numeric_Type, int Rows, int Cols>
+template<Numeric Numeric_Type, int Rows, int Cols>
 class Matrix{
     public:
         //Default Constructor
