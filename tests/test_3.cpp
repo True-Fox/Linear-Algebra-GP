@@ -1,8 +1,8 @@
 #include<stdlib.h>
 #include<iostream>
 
-#include "../linAlg/Matrix/matrix.h"
-#include "../linAlg/Matrix/vector.h"
+#include "../linAlg/Base/matrix.h"
+#include "../linAlg/Base/vector.h"
 
 #include "../linAlg/Utils/Utils.h"
 

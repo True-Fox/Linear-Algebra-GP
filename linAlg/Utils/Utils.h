@@ -1,6 +1,7 @@
-#include "../Matrix/matrix.h"
-#include "../Matrix/vector.h"
+#include "../Base/matrix.h"
+#include "../Base/vector.h"
 
+//Prints a matrix to stdout
 template<Numeric T, int Rows, int Cols>
 void print(Matrix<T, Rows, Cols>& mat) {
     for(int i = 0; i < Rows; ++i) {
@@ -11,6 +12,7 @@ void print(Matrix<T, Rows, Cols>& mat) {
     }
 }
 
+//Prints a Column Vector to stdout
 template<Numeric T, int Rows>
 void print(C_Vector<T, Rows>& vec){
     for(int i = 0; i < vec.getRows(); ++i) {
@@ -18,6 +20,7 @@ void print(C_Vector<T, Rows>& vec){
     }
 }
 
+//Prints a row vector to stdout
 template<Numeric T, int Cols>
 void print(Vector<T, Cols>& vec){
     for(int i = 0; i < vec.getCols(); ++i) {
@@ -26,11 +29,13 @@ void print(Vector<T, Cols>& vec){
     std::cout<<"\n";
 }
 
+//Prints an object to stdout
 template<Numeric T>
 void print(T& out){
     std::cout<<out<<"\n";
 }
 
+//Applies an operation defined in the lambda function to each element
 template<Numeric T, int Rows, int Cols, typename Func>
 void apply(Matrix<T, Rows, Cols>& Mat, Func&& func){
     for(int i = 0; i < Rows; ++i){
@@ -40,6 +45,7 @@ void apply(Matrix<T, Rows, Cols>& Mat, Func&& func){
     }
 }
 
+//Applies an operation defined in the lambda function to each element
 template<Numeric T, int Cols, typename Func>
 void apply(Vector<T, Cols>& Vec, Func&& func){
     for(int i = 0; i < Cols; ++i){
@@ -47,6 +53,7 @@ void apply(Vector<T, Cols>& Vec, Func&& func){
     }
 }
 
+//Applies an operation defined in the lambda function to each element
 template<Numeric T, int Rows, typename Func>
 void apply(C_Vector<T, Rows>& Vec, Func&& func){
     for(int i = 0; i < Rows; ++i){
@@ -54,6 +61,7 @@ void apply(C_Vector<T, Rows>& Vec, Func&& func){
     }
 }
 
+//Transposes the matrix
 template<Numeric T, int Rows, int Cols>
 Matrix<T, Cols, Rows> transpose(Matrix<T, Cols, Rows>& mat){
     Matrix<T, Cols, Rows> result;
@@ -65,6 +73,7 @@ Matrix<T, Cols, Rows> transpose(Matrix<T, Cols, Rows>& mat){
     return result;    
 }
 
+//Transposes the matrix
 template<Numeric T, int Cols>
 C_Vector<T, Cols> transpose(Vector<T, Cols>& mat){
     C_Vector<T, Cols> result;

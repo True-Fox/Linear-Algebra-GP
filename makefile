@@ -5,7 +5,7 @@ file_name = $(file_name)
 all: build run
 
 build:
-	g++ -std=c++20 tests/$(file_name).cpp -O3
+	g++ -std=c++20 -Wall tests/$(file_name).cpp -O3
 
 run:
 ifdef OS
