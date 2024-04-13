@@ -1,45 +1,28 @@
+#pragma once
+
 #ifndef VECTOR_H
 #define VECTOR_H
 
 #include "matrix.h"
 
-//Forward Declarations (I am not sure why yet)
-
-template<typename T, int Rows, int Cols>
-class Matrix;
-
-template<typename T, int Cols>
-class Matrix<T, 1, Cols>;
-
-template<typename T, int Rows>
-class Matrix<T, Rows, 1>;
-
-template<typename T, int size>
-using Vector = Matrix<T, 1, size>;
-
-template<typename T, int size>
-using C_Vector = Matrix<T, size, 1>;
-
-
-
-template<typename Numeric_Type, int Cols>
-class Matrix<Numeric_Type, 1, Cols>{
+template<Numeric_Type T, int Cols>
+class Matrix<T, 1, Cols>{
 
         private:
-        Numeric_Type *data;
+        T *data;
         int Rows = 1;
     public:
         //Constructor
         Matrix(){
-            data = new Numeric_Type[Cols];
+            data = new T[Cols];
         }
 
 
-        Matrix(std::initializer_list<Numeric_Type> list){
+        Matrix(std::initializer_list<T> list){
             if(list.size() != Cols){
                 throw std::invalid_argument("Initializer list size does not match Vector size");
             }
-            data = new Numeric_Type[Cols];
+            data = new T[Cols];
 
             auto it = list.begin();
             for (int i = 0; i < Cols; ++i) {
@@ -48,10 +31,10 @@ class Matrix<Numeric_Type, 1, Cols>{
         }
 
         template<int OtherCols>
-        typename std::enable_if<Cols == OtherCols, Vector<Numeric_Type, Cols>>::type
-        operator+(Vector<Numeric_Type, OtherCols>& other){
+        typename std::enable_if<Cols == OtherCols, Vector<T, Cols>>::type
+        operator+(Vector<T, OtherCols>& other){
             static_assert(Cols==OtherCols, "The dimensions do not match for the operation performed.");
-            Vector<Numeric_Type, Cols> result;
+            Vector<T, Cols> result;
             for(int i=0;i<Cols;i++){
                 result[i] = (*this)[i] + other[i];
             }
@@ -59,14 +42,14 @@ class Matrix<Numeric_Type, 1, Cols>{
         }
 
         template<int MatrixRows, int MatrixCols>
-        typename std::enable_if<Cols == MatrixRows, Vector<Numeric_Type, MatrixCols>>::type
-        operator*(const Matrix<Numeric_Type, MatrixRows, MatrixCols>& other)const{
+        typename std::enable_if<Cols == MatrixRows, Vector<T, MatrixCols>>::type
+        operator*(const Matrix<T, MatrixRows, MatrixCols>& other)const{
             static_assert(Cols == MatrixRows,"The given dimensions are not compatible for multiplication");
 
-            Vector<Numeric_Type, MatrixCols> result;
+            Vector<T, MatrixCols> result;
 
             for(int i=0; i<MatrixRows; i++){
-                Numeric_Type sum = 0;
+                T sum = 0;
                 for(int j=0; j<Cols; j++){
                     sum = sum + ((*this)[j] * other[j][i]);
                 }
@@ -77,14 +60,14 @@ class Matrix<Numeric_Type, 1, Cols>{
         }
 
         template<int ColRows>
-        typename std::enable_if<Cols == ColRows, Numeric_Type>::type
-        operator*(const C_Vector<Numeric_Type,ColRows>& other){
+        typename std::enable_if<Cols == ColRows, T>::type
+        operator*(const C_Vector<T,ColRows>& other){
             static_assert(Cols == ColRows,"The given dimensions are not compatible for multiplication");
 
-            Numeric_Type result;
+            T result;
 
             for(int i=0; i<Cols; i++){
-                Numeric_Type sum = 0;
+                T sum = 0;
                 for(int j=0; j<ColRows; j++){
                     sum = sum + ((*this)[i] * other[j]);
                 }
@@ -110,35 +93,35 @@ class Matrix<Numeric_Type, 1, Cols>{
         }
 
         //Overloading the [] operator
-        Numeric_Type& operator[](int row) {
+        T& operator[](int row) {
             return data[row];
         }
 
         //Required for const-correctness
-        const Numeric_Type& operator[](int row) const {
+        const T& operator[](int row) const {
             return data[row];
         }
 };
 
-template<typename Numeric_Type, int Rows>
-class Matrix<Numeric_Type, Rows, 1>{
+template<typename T, int Rows>
+class Matrix<T, Rows, 1>{
 
         private:
-        Numeric_Type *data;
+        T *data;
         int Cols = 1;
     public:
         //Constructor
         Matrix(){
-            data = new Numeric_Type[Rows];
+            data = new T[Rows];
         }
 
         //Intialize matrix with list
         //Example: Matrix<int, 2,2> M {1,2,3,4}
-        Matrix(std::initializer_list<Numeric_Type> list){
+        Matrix(std::initializer_list<T> list){
             if(list.size() != Rows){
                 throw std::invalid_argument("Initializer list size does not match Vector size");
             }
-            data = new Numeric_Type[Rows];
+            data = new T[Rows];
 
             auto it = list.begin();
             for (int i = 0; i < Rows; ++i) {
@@ -147,10 +130,10 @@ class Matrix<Numeric_Type, Rows, 1>{
         }
 
         template<int OtherRows>
-        typename std::enable_if<Rows==OtherRows, C_Vector<Numeric_Type, Rows>>::type
-        operator+(C_Vector<Numeric_Type, OtherRows>& other){
+        typename std::enable_if<Rows==OtherRows, C_Vector<T, Rows>>::type
+        operator+(C_Vector<T, OtherRows>& other){
             static_assert(Rows==OtherRows, "The dimensions do not match for the operation performed.");
-            C_Vector<Numeric_Type, Rows> result;
+            C_Vector<T, Rows> result;
             for(int i=0;i<Rows;i++){
                 result[i] = (*this)[i] + other[i];
             }
@@ -158,8 +141,8 @@ class Matrix<Numeric_Type, Rows, 1>{
         }
 
         template<int MatrixCols>
-        Matrix<Numeric_Type, Rows, MatrixCols> operator*(Vector<Numeric_Type, MatrixCols>& other){
-            Matrix<Numeric_Type, Rows, MatrixCols> result;
+        Matrix<T, Rows, MatrixCols> operator*(Vector<T, MatrixCols>& other){
+            Matrix<T, Rows, MatrixCols> result;
 
             for(int i=0; i<Rows; i++){
                 for(int j=0; j<MatrixCols; j++){
@@ -186,12 +169,12 @@ class Matrix<Numeric_Type, Rows, 1>{
         }
 
         //Overloading the [] operator
-        Numeric_Type& operator[](int row) {
+        T& operator[](int row) {
             return data[row];
         }
 
         //Required for const-correctness
-        const Numeric_Type& operator[](int row) const {
+        const T& operator[](int row) const {
             return data[row];
         }
 };
