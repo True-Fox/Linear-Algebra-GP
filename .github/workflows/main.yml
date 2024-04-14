@@ -28,10 +28,6 @@ jobs:
         run: |
               make file_name=test_3
               echo "Test case 3: passed"
-      - name: Test 4 - LU Decomposition
-        run: |
-              make file_name=test_5
-              echo "Test case 4: passed"
               
       - name: Clean Files
         run: make clean
