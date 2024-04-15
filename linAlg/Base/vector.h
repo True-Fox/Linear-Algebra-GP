@@ -4,6 +4,7 @@
 #define VECTOR_H
 
 #include "matrix.h"
+#include <math.h>
 
 //Forward Declarations (I am not sure why yet)
 
@@ -96,6 +97,19 @@ class Matrix<T, 1, Cols>{
             return result;
         }
 
+        double magnitude_helper(T value) const {
+            return value * value;
+        }
+
+        template<typename... Args>
+        double magnitude_helper(T first, Args... args) const {
+            return first * first + magnitude_helper(args...);
+        }
+
+        double magnitude() const {
+            return std::sqrt(magnitude_helper(data[0], data[1]));
+        }
+
         //Destructor
         ~Matrix(){
             delete[] data;
@@ -170,6 +184,19 @@ class Matrix<T, Rows, 1>{
             }
 
             return result;
+        }
+
+        double magnitude_helper(T value) const {
+            return value * value;
+        }
+
+        template<typename... Args>
+        double magnitude_helper(T first, Args... args) const {
+            return first * first + magnitude_helper(args...);
+        }
+
+        double magnitude() const {
+            return std::sqrt(magnitude_helper(data[0], data[1]));
         }
 
         //Destructor

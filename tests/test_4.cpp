@@ -7,9 +7,14 @@
 #include "../linAlg/Utils/Utils.h"
 
 int main(){
-    
-    Matrix<double, 2, 2> mat {1.2, 2.2, 3.3, 4.4};
-    Matrix<int, 2, 2> mat1 {4, 3, 2, 1};
-    auto res = transpose(mat1) * mat1;
-    print(res);
+    C_Vector<double, 4> vec = {1,2,3,4};
+    auto mag = vec.magnitude();
+    std::cout<<vec.magnitude() << "\n";
+
+    print("Norm of vector: ");
+    apply(vec, [mag](int x){
+        return (double)x/mag;
+    });    
+
+    print(vec);
 }

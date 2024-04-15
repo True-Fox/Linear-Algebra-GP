@@ -35,7 +35,9 @@ class __LU_Decompose{
 
 };
 
-
+/*Performs LU Decomposition
+* (Wrapper over __LU_Decompose to enable auto deduction of template arguments)
+*/
 template<typename T, int Rows, int Cols>
 typename std::enable_if<Rows==Cols,__LU_Decompose<T, Rows, Cols>>::type
 LU_Decompose(const Matrix<T, Rows, Cols>& mat){
