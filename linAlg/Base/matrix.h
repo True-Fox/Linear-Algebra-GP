@@ -121,6 +121,18 @@ class Matrix{
 
         template<int OtherRow, int OtherColumn>
         typename std::enable_if<(Cols == OtherColumn && Rows == OtherRow), Matrix<T, Rows, Cols>>::type
+        operator-(const Matrix<T, OtherRow, OtherColumn>& other) const {
+            Matrix<T, Rows, Cols> result;
+            for (int i = 0; i < Rows; ++i) {
+                for (int j = 0; j < Cols; ++j) {
+                    result[i][j] = (*this)[i][j] - other[i][j];
+                }
+            }
+            return result;
+        }        
+
+        template<int OtherRow, int OtherColumn>
+        typename std::enable_if<(Cols == OtherColumn && Rows == OtherRow), Matrix<T, Rows, Cols>>::type
         operator+(const Matrix<T, OtherRow, OtherColumn>&& other) const {
             Matrix<T, Rows, Cols> result;
             for (int i = 0; i < Rows; ++i) {
@@ -130,6 +142,18 @@ class Matrix{
             }
             return result;
         }
+
+        template<int OtherRow, int OtherColumn>
+        typename std::enable_if<(Cols == OtherColumn && Rows == OtherRow), Matrix<T, Rows, Cols>>::type
+        operator-(const Matrix<T, OtherRow, OtherColumn>&& other) const {
+            Matrix<T, Rows, Cols> result;
+            for (int i = 0; i < Rows; ++i) {
+                for (int j = 0; j < Cols; ++j) {
+                    result[i][j] = (*this)[i][j] - other[i][j];
+                }
+            }
+            return result;
+        }        
 
         //matrix multiplication
         template<int OtherRows ,int OtherCols>

@@ -173,6 +173,17 @@ class Matrix<T, Rows, 1>{
             return result;
         }
 
+        template<int OtherRows>
+        typename std::enable_if<Rows==OtherRows, C_Vector<T, Rows>>::type
+        operator-(C_Vector<T, OtherRows>& other){
+            static_assert(Rows==OtherRows, "The dimensions do not match for the operation performed.");
+            C_Vector<T, Rows> result;
+            for(int i=0;i<Rows;i++){
+                result[i] = (*this)[i] - other[i];
+            }
+            return result;
+        }        
+
         template<int MatrixCols>
         Matrix<T, Rows, MatrixCols> operator*(Vector<T, MatrixCols>& other){
             Matrix<T, Rows, MatrixCols> result;
