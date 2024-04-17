@@ -1,19 +1,27 @@
 #include<stdlib.h>
 #include<iostream>
-
+#include "../linAlg/Base/eigen.h"
 #include "../linAlg/Base/matrix.h"
 #include "../linAlg/Base/vector.h"
 
 #include "../linAlg/Utils/Utils.h"
 #include "../linAlg/Utils/LU_Decomposition.h"
-#include "../linAlg/Utils/eigen.h"
+
 
 int main(){
+    constexpr int Rows = 3;
+    constexpr int Cols = 3;
 
-    Matrix<int ,3, 3> res {2,1,1,1,3,2,1,2,3};
+    // Create a matrix
+    EigenMatrix<double, Rows, Cols> A = {10.0, 12.0, 1.0, 16.0, 23.0, 0.0, 23.0, 34.0, 2.0};
 
-    auto eigenVector = eigen(res);
+    // Find the dominant Eigen value and Eigen vector
+    auto result = A.eigen();
 
-    print(eigenVector);
+    // Print the result
+    std::cout << "Dominant Eigen vector:" << std::endl;
+    print(*result);
+
+    return 0;
 
 }

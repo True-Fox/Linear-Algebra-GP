@@ -1,3 +1,6 @@
+#ifndef UTILS_H
+#define UTILS_H
+
 #include "../Base/matrix.h"
 #include "../Base/vector.h"
 
@@ -82,3 +85,5 @@ C_Vector<T, Cols> transpose(Vector<T, Cols>& mat){
     }
     return result;    
 }
+
+#endif
