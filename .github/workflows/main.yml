@@ -31,7 +31,12 @@ jobs:
       - name: Test 4 - LU Decomposition
         run: |
               make file_name=test_5
-              echo "Test case 3: passed"              
+              echo "Test case 4: passed"
+      - name: Test 5 - Eigen Vector
+        run: |
+              make file_name=test_6
+              echo "Test case 5: passed"
+                      
               
       - name: Clean Files
         run: make clean
