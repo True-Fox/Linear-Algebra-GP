@@ -1,17 +1,20 @@
 #include "../Base/matrix.h"
 #include "../Base/vector.h"
 
+//An Implementaion of LU Decompose using DooLittle's algorithm
 template<Numeric T, int Rows, int Cols>
 class __LU_Decompose{
     public:
         __LU_Decompose(const Matrix<T, Rows, Cols>& matrix){
-
+            
+            //Intialise Lower matrix with 1's
             for(int i=0;i<Rows;i++){
                 for(int j=0;j<Cols;j++){
                     L[i][i]=1;
                 }
             }
 
+            //Calculating Upper Matrix
             for(int k=0; k<Rows; k++){
                 for(int j=k; j<Cols; ++j){
                     U[k][j] = matrix[k][j];
@@ -20,13 +23,14 @@ class __LU_Decompose{
                     }
                 }
 
-                for(int i=k+1; i<Rows; i++){
-                    L[i][k] = matrix[i][k];
-                    for(int p=0;p<k;p++){
-                        L[i][k] -= L[i][p] * U[p][k];
-                    }
-                    L[i][k] /= U[k][k];
+            //Calculating Lower Matrix
+            for(int i=k+1; i<Rows; i++){
+                L[i][k] = matrix[i][k];
+                for(int p=0;p<k;p++){
+                    L[i][k] -= L[i][p] * U[p][k];
                 }
+                L[i][k] /= U[k][k];
+            }
             }
         };
 

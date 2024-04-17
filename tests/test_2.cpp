@@ -63,6 +63,12 @@ int main() {
     print(vec7);
     print(vec10);
 
+    std::cout<<"Subtraction of two vectors: \n";
+    Matrix<int, 2,2> mat4 = {1,2,3,4};
+    Matrix<int, 2,2> mat5 = {4,3,2,1};
+    auto res12 = mat4 - mat5;
+    print(res12);
+
     std::cout<<"\nCombination of addition and multiplication\n";
     auto res11 = (vec10 * vec7) + (res3 * res3);
     print(res11);
