@@ -17,26 +17,31 @@ concept Numeric = requires {
     std::is_arithmetic_v<T>;
 };
 
-
+// Forward declarations : generic matrix
 template<Numeric T, int Rows, int Cols>
 class Matrix;
 
+// Forward declarations : row vector
 template<Numeric T, int Cols>
 class Matrix<T, 1, Cols>;
 
+// Forward declarations : column vector
 template<Numeric T, int Rows>
 class Matrix<T, Rows, 1>;
 
+// Alias for row vector
 template<Numeric T, int size>
 using Vector = Matrix<T, 1, size>;
 
+// Alias for column vector
 template<Numeric T, int size>
 using C_Vector = Matrix<T, size, 1>;
 
+// Generic Matrix class with functions and operations
 template<Numeric T, int Rows, int Cols>
 class Matrix{
     public:
-        //Default Constructor
+        // Default Constructor: Allocating memory
         Matrix(){
             data = new T*[Rows];
             for(int i = 0; i<Rows; i++){
@@ -44,8 +49,8 @@ class Matrix{
             }
         }
 
-        //Intialize matrix with list
-        //Example: Matrix<int, 2,2> M {1,2,3,4}
+        // Initialize matrix with list
+        // Example: Matrix<int, 2,2> M {1,2,3,4}
         Matrix(std::initializer_list<T> list){
             if(list.size() != Rows * Cols){
                 throw std::invalid_argument("Initializer list size does not match matrix size");
@@ -73,27 +78,29 @@ class Matrix{
             delete[] data;
         }
 
-        //get number of rows
+        // Get the number of rows
         int getRows(){
             return Rows;
         }
 
-        //get number of columns
+        // Get the number of columns
         int getCols(){
             return Cols;
         }
 
-        //Overloading the [] operator
+        // Overloading the [] operator
         T* operator[](int row) {
             return data[row];
         }
 
-        //Required for const-correctness
+        // Required for const-correctness 
         const T* operator[](int row) const {
             return data[row];
         }
 
-        //addition of two matrices
+        // Operator overloading
+
+        // Addition of two matrices 
         template<int OtherRow, int OtherColumn>
         typename std::enable_if<(Cols == OtherColumn && Rows == OtherRow), Matrix<T, Rows, Cols>>::type
         operator+(const Matrix<T, OtherRow, OtherColumn>& other) const {
@@ -106,6 +113,7 @@ class Matrix{
             return result;
         }
 
+        // Subtraction of two matrices 
         template<int OtherRow, int OtherColumn>
         typename std::enable_if<(Cols == OtherColumn && Rows == OtherRow), Matrix<T, Rows, Cols>>::type
         operator-(const Matrix<T, OtherRow, OtherColumn>& other) const {
@@ -118,6 +126,7 @@ class Matrix{
             return result;
         }        
 
+        // Addition of two matrices 
         template<int OtherRow, int OtherColumn>
         typename std::enable_if<(Cols == OtherColumn && Rows == OtherRow), Matrix<T, Rows, Cols>>::type
         operator+(const Matrix<T, OtherRow, OtherColumn>&& other) const {
@@ -130,6 +139,7 @@ class Matrix{
             return result;
         }
 
+        // Subtraction of two matrices 
         template<int OtherRow, int OtherColumn>
         typename std::enable_if<(Cols == OtherColumn && Rows == OtherRow), Matrix<T, Rows, Cols>>::type
         operator-(const Matrix<T, OtherRow, OtherColumn>&& other) const {
@@ -142,7 +152,7 @@ class Matrix{
             return result;
         }        
 
-        //matrix multiplication
+        // Multiplication of two matrices 
         template<int OtherRows ,int OtherCols>
         typename std::enable_if<Cols == OtherRows, Matrix<T, Rows, OtherCols>>::type
         operator*(const Matrix<T, OtherRows, OtherCols>& other) const {
@@ -161,6 +171,7 @@ class Matrix{
             return result;
         }  
 
+        // Multiplication of two matrices 
         template<int OtherRows, int OtherCols>
         typename std::enable_if<Cols == OtherRows, Matrix<T, Rows, OtherCols>>::type
         operator*(const Matrix<T, OtherRows, OtherCols>&& other) const {
@@ -177,6 +188,7 @@ class Matrix{
             return result;
         }
 
+        // Multiplication of a column vector and a matrix 
         template<int VectorRows>
         typename std::enable_if<Cols == VectorRows, C_Vector<T, Rows>>::type
         operator*(const C_Vector<T, VectorRows>& other) const {
@@ -216,7 +228,7 @@ class Matrix{
             return *this;
         }
 
-        //determinant of the square matrices only
+        // Determinant of the square matrices only
         template<int dim = Rows>
         typename std::enable_if<(dim == Cols), T>::type determinant() const {
             return determinantHelper(*this);
@@ -224,7 +236,7 @@ class Matrix{
 
     private:
         T **data;
-        //calculate determinant recursively
+        // Calculate determinant recursively
         template<int dim = Rows>
         typename std::enable_if<(dim == 1),T>::type determinantHelper(const Matrix& mat) const {
             return mat[0][0];
