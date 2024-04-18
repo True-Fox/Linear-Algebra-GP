@@ -6,25 +6,30 @@
 #include "matrix.h"
 #include <math.h>
 
-//Forward Declarations (I am not sure why yet)
+//Forward Declarations 
 
+// Forward declaration of Matrix class template
 template<Numeric T, int Rows, int Cols>
 class Matrix;
 
+// Forward declaration of Matrix specialization for a row vector
 template<Numeric T, int Cols>
 class Matrix<T, 1, Cols>;
 
+// Forward declaration of Matrix specialization for a column vector
 template<Numeric T, int Rows>
 class Matrix<T, Rows, 1>;
 
+// Alias for row vector
 template<Numeric T, int size>
 using Vector = Matrix<T, 1, size>;
 
+//Alias for column vector
 template<Numeric T, int size>
 using C_Vector = Matrix<T, size, 1>;
 
 
-
+// Matrix specialization for row vector
 template<Numeric T, int Cols>
 class Matrix<T, 1, Cols>{
 
@@ -50,6 +55,7 @@ class Matrix<T, 1, Cols>{
             }
         }
 
+        // Overloading addition for row vectors
         template<int OtherCols>
         typename std::enable_if<Cols == OtherCols, Vector<T, Cols>>::type
         operator+(Vector<T, OtherCols>& other){
@@ -61,6 +67,20 @@ class Matrix<T, 1, Cols>{
             return result;
         }
 
+
+        // Overloading subtraction for row vectors
+        template<int OtherCols>
+        typename std::enable_if<Cols == OtherCols, Vector<T, Cols>>::type
+        operator-(Vector<T, OtherCols>& other){
+            static_assert(Cols==OtherCols, "The dimensions do not match for the operation performed.");
+            Vector<T, Cols> result;
+            for(int i=0;i<Cols;i++){
+                result[i] = (*this)[i] - other[i];
+            }
+            return result;
+        }
+
+        // Overloading mulitplication for vector matrix multiplication
         template<int MatrixRows, int MatrixCols>
         typename std::enable_if<Cols == MatrixRows, Vector<T, MatrixCols>>::type
         operator*(const Matrix<T, MatrixRows, MatrixCols>& other)const{
@@ -79,6 +99,7 @@ class Matrix<T, 1, Cols>{
             return result;
         }
 
+        // Overload multiplication operator for vector-column vector multiplication
         template<int ColRows>
         typename std::enable_if<Cols == ColRows, T>::type
         operator*(const C_Vector<T,ColRows>& other){
@@ -97,6 +118,7 @@ class Matrix<T, 1, Cols>{
             return result;
         }
 
+        // Calculate the magnitude of the vector
         double magnitude_helper(T value) const {
             return value * value;
         }
@@ -115,27 +137,28 @@ class Matrix<T, 1, Cols>{
             delete[] data;
         }
 
-        //get number of rows
+        // Get number of rows
         int getRows(){
             return 1;
         }
 
-        //get number of columns
+        // Get number of columns
         int getCols(){
             return Cols;
         }
 
-        //Overloading the [] operator
+        // Overloading the [] operator
         T& operator[](int row) {
             return data[row];
         }
 
-        //Required for const-correctness
+        // Required for const-correctness
         const T& operator[](int row) const {
             return data[row];
         }
 };
 
+// Matrix specialization for column vectors
 template<Numeric T, int Rows>
 class Matrix<T, Rows, 1>{
 
@@ -162,6 +185,7 @@ class Matrix<T, Rows, 1>{
             }
         }
 
+        // Overload addition operator for column vector addition
         template<int OtherRows>
         typename std::enable_if<Rows==OtherRows, C_Vector<T, Rows>>::type
         operator+(C_Vector<T, OtherRows>& other){
@@ -173,6 +197,7 @@ class Matrix<T, Rows, 1>{
             return result;
         }
 
+        // Overload subtraction operator for column vector subtraction
         template<int OtherRows>
         typename std::enable_if<Rows==OtherRows, C_Vector<T, Rows>>::type
         operator-(C_Vector<T, OtherRows>& other){
@@ -184,6 +209,7 @@ class Matrix<T, Rows, 1>{
             return result;
         }        
 
+        // Overload multiplication operator for column vector-matrix multiplication
         template<int MatrixCols>
         Matrix<T, Rows, MatrixCols> operator*(Vector<T, MatrixCols>& other){
             Matrix<T, Rows, MatrixCols> result;
@@ -197,6 +223,7 @@ class Matrix<T, Rows, 1>{
             return result;
         }
 
+        // Calculate the magnitude of the vector
         double magnitude_helper(T value) const {
             return value * value;
         }
@@ -215,22 +242,22 @@ class Matrix<T, Rows, 1>{
             delete[] data;
         }
 
-        //get number of rows
+        // Get number of rows
         int getRows(){
             return Rows;
         }
 
-        //get number of columns
+        // Get number of columns
         int getCols(){
             return 1;
         }
 
-        //Overloading the [] operator
+        // Overloading the [] operator
         T& operator[](int row) {
             return data[row];
         }
 
-        //Required for const-correctness
+        // Required for const-correctness
         const T& operator[](int row) const {
             return data[row];
         }
