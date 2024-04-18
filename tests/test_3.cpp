@@ -21,6 +21,7 @@ int main(){
     Matrix<int, 4,1> vec2 {1,2,3,4};
 
     auto res3 = vec1 * vec2;
+    print(res3);
 
     std::cout<<"Trial-1\n";
     auto res2 = transpose(vec1) * vec1 ;
