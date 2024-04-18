@@ -17,18 +17,6 @@ concept Numeric = requires {
     std::is_arithmetic_v<T>;
 };
 
-template<typename T>
-concept MatrixConcept = requires(T m) {
-    { m.getRows() } -> std::same_as<int>;
-    { m.getCols() } -> std::same_as<int>;
-    { m[0][0] } -> Numeric;
-};
-
-template<typename T>
-concept SquareMatrix = MatrixConcept<T> && requires(T m) {
-    { m.getRows()  ==  m.getCols() };
-};
-
 
 template<Numeric T, int Rows, int Cols>
 class Matrix;
@@ -59,7 +47,6 @@ class Matrix{
         //Intialize matrix with list
         //Example: Matrix<int, 2,2> M {1,2,3,4}
         Matrix(std::initializer_list<T> list){
-            // assert(list.size() == Rows * Cols && "Initializer list size does not match matrix size");
             if(list.size() != Rows * Cols){
                 throw std::invalid_argument("Initializer list size does not match matrix size");
             }

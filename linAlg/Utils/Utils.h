@@ -76,11 +76,21 @@ Matrix<T, Cols, Rows> transpose(Matrix<T, Cols, Rows>& mat){
     return result;    
 }
 
-//Transposes the matrix
+//Transposes the row vector
 template<Numeric T, int Cols>
 C_Vector<T, Cols> transpose(Vector<T, Cols>& mat){
     C_Vector<T, Cols> result;
     for (int j = 0; j < Cols; ++j) {
+        result[j] = mat[j];
+    }
+    return result;    
+}
+
+//Transposes the column vector
+template<Numeric T, int Rows>
+Vector<T, Rows> transpose(C_Vector<T, Rows>& mat){
+    Vector<T,Rows> result;
+    for (int j = 0; j < Rows; ++j) {
         result[j] = mat[j];
     }
     return result;    
